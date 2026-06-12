@@ -10,13 +10,9 @@
 
 ### 1.2 设计的问题
 
-本实验设计的问题为：
+本实验设计的问题为:在比特币交易网络中，如何利用中心性分析识别具有反洗钱关注价值的高风险交易枢纽，并进一步分析其资金汇聚和风险扩散关系？
 
-```text
-在比特币交易网络中，如何利用中心性分析识别具有反洗钱关注价值的高风险交易枢纽，并进一步分析其资金汇聚和风险扩散关系？
-```
-
-该问题比单纯查询两笔交易之间是否存在路径更贴近实际金融风控场景。在数字货币反洗钱分析中，监管机构和金融机构不仅关注某一笔交易是否异常，还关注异常交易是否处于网络中心位置、是否接收大量来源交易、是否继续向外传播风险。
+在数字货币反洗钱分析中，监管机构和金融机构不仅关注某一笔交易是否异常，还关注异常交易是否处于网络中心位置、是否接收大量来源交易、是否继续向外传播风险。
 
 ### 1.3 实际金融意义
 
@@ -29,15 +25,13 @@
 | 与 `class=1` 交易距离较近的节点 | 可能存在风险传导，需要进一步审查 |
 | 连接大量 `unknown` 交易的风险节点 | 可能隐藏未识别风险，适合纳入重点监测 |
 
-因此，本实验不只是完成图算法调用，而是尝试模拟一个具体金融问题：利用 TuGraph 从交易网络中发现值得重点关注的风险交易节点，并解释这些节点在反洗钱分析中的意义。
-
 ---
 
 ## 2. 实验原理
 
 ### 2.1 数据建模
 
-本实验继续使用 Transactions Dataset 数据集，将比特币交易数据建模为一张有向图：
+本实验继续使用作业1中数据集，将比特币交易数据建模为一张有向图：
 
 | 类型 | 名称 | 含义 |
 |---|---|---|
@@ -103,17 +97,6 @@ transaction(txId1) -> transaction(txId2)
 连接方式：bolt
 连接地址：8.140.39.221:7687
 账号：admin
-密码：以实验平台登录页显示为准
-```
-
-由于报告需要上传到 GitHub，密码不建议直接写在公开 README 中。如果提交截图中包含密码，建议在公开仓库中对密码进行遮挡。
-
-登录界面如下：
-
-<p align="center">
-  <img src="images1/1.png" alt="阿里云 TuGraph 登录界面" width="850">
-</p>
-<p align="center"><b>图 1 阿里云 TuGraph 登录界面</b></p>
 
 ### 3.2 进入实验图项目
 
@@ -124,14 +107,6 @@ transaction(txId1) -> transaction(txId2)
 | 点 | `transaction` | 比特币交易节点 |
 | 边 | `transfer` | 交易之间的有向关系 |
 
-图模型中，`transfer` 边从一个 `transaction` 节点指向另一个 `transaction` 节点，表示交易网络中的有向连接关系。
-
-图模型界面如下：
-
-<p align="center">
-  <img src="images2/02_graph_schema.png" alt="图模型" width="850">
-</p>
-<p align="center"><b>图 2 transaction 与 transfer 图模型</b></p>
 
 ### 3.3 查询风险交易的入度中心性
 
@@ -147,12 +122,6 @@ RETURN hub.txId AS risk_tx,
        count(src) AS in_degree
 ORDER BY in_degree DESC
 LIMIT 10;
-```
-
-如果 `class` 字段导入为数值类型，则条件改为：
-
-```cypher
-WHERE hub.class = 1
 ```
 
 运行结果中，交易 `84460750` 是一个值得重点关注的风险节点。根据本地数据统计，该节点属于 `class=1`，入度为 68，说明有大量交易流向该风险交易，具有明显的资金汇聚特征。
@@ -227,7 +196,7 @@ LIMIT 30;
 继续查询该风险节点的后续流向：
 
 ```cypher
-MATCH (hub:transaction {txId:'84460750'})-[:transfer]->(dst:transaction)
+MATCH (hub:transaction {txId:84460750})-[:transfer]->(dst:transaction)
 RETURN hub.txId AS risk_hub,
        hub.class AS hub_class,
        dst.txId AS next_tx,
