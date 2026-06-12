@@ -209,7 +209,7 @@ RETURN hub.txId AS risk_hub,
 Cypher 代码如下：
 
 ```cypher
-MATCH (risk:transaction {txId:'97011545'})-[:transfer]->(mid:transaction)-[:transfer]->(target:transaction)
+MATCH (risk:transaction {txId:97011545})-[:transfer]->(mid:transaction)-[:transfer]->(target:transaction)
 RETURN risk.txId AS risk_tx,
        risk.class AS risk_class,
        mid.txId AS mid_tx,
@@ -232,73 +232,10 @@ LIMIT 20;
 查询结果截图如下：
 
 <p align="center">
-  <img src="images2/07_risk_diffusion_paths.png" alt="风险扩散路径分析" width="850">
+  <img src="images2/5.png" alt="风险扩散路径分析" width="850">
 </p>
-<p align="center"><b>图 7 风险交易 97011545 的两跳扩散路径</b></p>
+<p align="center"><b>图 5 风险交易 97011545 的两跳扩散路径</b></p>
 
----
-
-## 4. 代码汇总
-
-### 4.1 风险交易入度中心性
-
-```cypher
-MATCH (src:transaction)-[:transfer]->(hub:transaction)
-WHERE hub.class = '1'
-RETURN hub.txId AS risk_tx,
-       hub.class AS risk_class,
-       count(src) AS in_degree
-ORDER BY in_degree DESC
-LIMIT 10;
-```
-
-### 4.2 风险交易出度中心性
-
-```cypher
-MATCH (hub:transaction)-[:transfer]->(dst:transaction)
-WHERE hub.class = '1'
-RETURN hub.txId AS risk_tx,
-       hub.class AS risk_class,
-       count(dst) AS out_degree
-ORDER BY out_degree DESC
-LIMIT 10;
-```
-
-### 4.3 资金汇聚来源分析
-
-```cypher
-MATCH (src:transaction)-[:transfer]->(hub:transaction {txId:'84460750'})
-RETURN src.txId AS source_tx,
-       src.class AS source_class,
-       hub.txId AS risk_hub,
-       hub.class AS hub_class
-LIMIT 30;
-```
-
-### 4.4 风险节点后续流向
-
-```cypher
-MATCH (hub:transaction {txId:'84460750'})-[:transfer]->(dst:transaction)
-RETURN hub.txId AS risk_hub,
-       hub.class AS hub_class,
-       dst.txId AS next_tx,
-       dst.class AS next_class;
-```
-
-### 4.5 风险扩散路径分析
-
-```cypher
-MATCH (risk:transaction {txId:'97011545'})-[:transfer]->(mid:transaction)-[:transfer]->(target:transaction)
-RETURN risk.txId AS risk_tx,
-       risk.class AS risk_class,
-       mid.txId AS mid_tx,
-       mid.class AS mid_class,
-       target.txId AS target_tx,
-       target.class AS target_class
-LIMIT 20;
-```
-
----
 
 ## 5. 结果含义分析
 
@@ -316,34 +253,12 @@ LIMIT 20;
 
 通过本次实验，我进一步理解了 TuGraph 在金融交易网络分析中的应用价值。相比普通表格数据，图数据库能够更加自然地表达交易之间的连接关系，并通过 Cypher 查询快速找到网络中的重要节点和关联路径。
 
-在实验过程中，我体会到图建模的准确性非常重要。只有正确建立 `transaction` 点和 `transfer` 边，并正确映射边的起点和终点，后续中心性分析和路径分析才有意义。尤其是在反洗钱场景中，交易关系本身往往比单笔交易属性更重要，图数据库能够很好地支持这种关系型分析。
+在实验过程中，我体会到图建模的准确性非常重要。只有正确建立 `transaction` 点和 `transfer` 边，并正确映射边的起点和终点，后续中心性分析和路径分析才有意义。尤其是在反洗钱场景中，交易关系本身往往比单笔交易属性更重要，图数据库能够很好地支持这种关系型分析。TuGraph 的可视化界面也便于观察交易网络结构。通过查询结果和图形展示，可以直观看到风险交易的资金汇聚和扩散情况，这对理解区块链交易追踪、异常交易识别和金融风控都有帮助。
 
-TuGraph 的可视化界面也便于观察交易网络结构。通过查询结果和图形展示，可以直观看到风险交易的资金汇聚和扩散情况，这对理解区块链交易追踪、异常交易识别和金融风控都有帮助。
+通过本学期《区块链与数字货币》课程的学习，我对区块链技术和数字货币体系有了更加系统和深入的认识。课程内容从区块链的基础概念出发，逐步介绍了密码学、P2P 网络、分布式一致性、比特币、以太坊、智能合约以及区块链应用案例等内容，使我能够从技术原理和实际应用两个层面理解区块链。
 
----
+在比特币部分的学习中，我对数字货币的运行机制有了更清晰的认识。比特币系统并不是简单地“发行货币”，而是通过交易、区块、挖矿、工作量证明和最长链规则等机制共同维护一个去中心化账本。
 
-## 7. GitHub 提交说明
+总体来看，这门课程不仅让我掌握了区块链和数字货币的基本原理，也让我意识到区块链技术并不是万能的。它在可信存储、去中心化协作和可追溯性方面具有优势，但也面临性能、监管、安全和应用落地等多方面挑战。未来如果要真正应用区块链技术，需要结合具体业务场景，判断是否真的需要去中心化、不可篡改和多方共识，而不是盲目追求“上链”。
 
-提交 GitHub 时，建议包含以下内容：
-
-```text
-README_作业2.md
-images1/
-images2/
-```
-
-其中，`images1/1.png` 用于展示阿里云 TuGraph 登录界面，`images2` 文件夹用于存放本实验的运行截图。
-
-截图文件名建议与本文中的引用保持一致：
-
-| 文件名 | 内容 |
-|---|---|
-| `images1/1.png` | 阿里云 TuGraph 登录界面 |
-| `images2/02_graph_schema.png` | 图模型截图 |
-| `images2/03_in_degree_result.png` | 风险交易入度中心性结果 |
-| `images2/04_out_degree_result.png` | 风险交易出度中心性结果 |
-| `images2/05_hub_in_sources.png` | 资金汇聚来源分析 |
-| `images2/06_hub_out_target.png` | 风险节点后续流向 |
-| `images2/07_risk_diffusion_paths.png` | 风险扩散路径分析 |
-
-上传完成后，将 GitHub 仓库链接提交到学习通即可。
+同时我想真诚地感谢本门课程的授课老师王卯宁教授。她深入浅出幽默风趣的教学风格使我获益良多。同时课程的设置也非常精彩，选取的都是实际的区块链和加密货币的应用案例。如果有学弟学妹看到这个仓库欢迎选取本门区块链与数字货币选修课。
