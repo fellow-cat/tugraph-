@@ -93,10 +93,9 @@ transaction(txId1) -> transaction(txId2)
 登录信息如下：
 
 ```text
-连接方式：bolt
 连接地址：8.140.39.221:7687
 账号：admin
----
+```
 
 ### 3.2 进入实验图项目
 
