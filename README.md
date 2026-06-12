@@ -1,4 +1,4 @@
-TuGraph 图数据库实验报告：Elliptic 比特币交易网络分析
+TuGraph 图数据库实验报告：tugraph数据平台基础操作学习
 
 1. 实验基础知识
 
@@ -10,7 +10,7 @@ TuGraph 图数据库实验报告：Elliptic 比特币交易网络分析
 
 ### 1.2 TuGraph 简介
 
-TuGraph 是一款高性能图数据库系统，支持图数据存储、图建模、数据导入、Cypher 查询和图可视化分析等功能。本实验使用 TuGraph 对 Elliptic Transactions Dataset 进行图建模与查询操作，主要目标是掌握图数据库的基本使用流程，包括平台启动、图项目创建、图模型设计、数据导入以及 Cypher 查询。
+TuGraph 是一款高性能图数据库系统，支持图数据存储、图建模、数据导入、Cypher 查询和图可视化分析等功能。本实验使用 TuGraph 对 作业一 进行图建模与查询操作，主要目标是掌握图数据库的基本使用流程，包括平台启动、图项目创建、图模型设计、数据导入以及 Cypher 查询。
 
 TuGraph 采用属性图模型，能够将节点、边及其属性统一存储和查询。在本实验中，比特币交易被表示为交易节点，交易之间的关联关系被表示为有向边，从而形成一张比特币交易网络图。
 
@@ -33,24 +33,12 @@ TuGraph 采用属性图模型，能够将节点、边及其属性统一存储和
 
 ### 2.1 启动 TuGraph 服务
 
-本实验通过 Docker 启动 TuGraph 服务。启动命令如下：
-
-```bash
-docker run -d -v D:\wangmaoning:/mnt -p 7070:7070 -p 7687:7687 tugraph/tugraph-runtime-ubuntu18.04:4.5.0 lgraph_server -d run --enable_plugin true
-```
-
-其中，`7070` 端口用于访问 TuGraph Web 管理页面，`7687` 端口用于 Bolt 连接，`-v D:\wangmaoning:/mnt` 用于将本地目录映射到容器内部，方便后续数据文件导入。
-
-TuGraph 服务启动成功后，可以在浏览器中访问：
-
-```text
-http://localhost:7070
-```
+使用阿里云平台登录tugraph操作界面
 
 启动成功界面如下：
 
 <p align="center">
-  <img src="images/01_tugraph_start.png" alt="TuGraph 服务启动成功" width="850">
+  <img src="images/1.png" alt="TuGraph 服务启动成功" width="850">
 </p>
 <p align="center"><b>图 1 TuGraph 服务启动成功界面</b></p>
 
@@ -60,7 +48,7 @@ http://localhost:7070
 
 ```text
 用户名：admin
-密码：73@TuGraph
+密码：!EVqpvl5C9s7O3pM9
 ```
 
 登录成功后，可以进入 TuGraph 图项目管理页面，后续的建图、数据导入和查询操作均在该平台中完成。
@@ -68,7 +56,7 @@ http://localhost:7070
 登录成功界面如下：
 
 <p align="center">
-  <img src="images/02_tugraph_login.png" alt="登录 TuGraph 平台" width="850">
+  <img src="images/1.png" alt="登录 TuGraph 平台" width="850">
 </p>
 <p align="center"><b>图 2 TuGraph 平台登录成功界面</b></p>
 
@@ -89,7 +77,7 @@ elliptic_transactions
 新建图项目界面如下：
 
 <p align="center">
-  <img src="images/03_create_graph.png" alt="新建图项目" width="850">
+  <img src="images/2.png" alt="新建图项目" width="850">
 </p>
 <p align="center"><b>图 3 新建图项目界面</b></p>
 
@@ -120,7 +108,7 @@ transaction(txId1) -> transaction(txId2)
 图模型如下：
 
 <p align="center">
-  <img src="images/04_graph_schema.png" alt="图模型设计" width="850">
+  <img src="images/3.png" alt="图模型设计" width="850">
 </p>
 <p align="center"><b>图 4 transaction 节点与 transfer 边的图模型</b></p>
 
@@ -140,14 +128,14 @@ transaction(txId1) -> transaction(txId2)
 点数据导入配置界面如下：
 
 <p align="center">
-  <img src="images/05_import_nodes_config.png" alt="点数据导入配置" width="850">
+  <img src="images/4.png" alt="点数据导入配置" width="850">
 </p>
 <p align="center"><b>图 5 点数据导入配置界面</b></p>
 
 点数据导入成功界面如下：
 
 <p align="center">
-  <img src="images/06_import_nodes_success.png" alt="点数据导入成功" width="850">
+  <img src="images/5.png" alt="点数据导入成功" width="850">
 </p>
 <p align="center"><b>图 6 点数据导入成功界面</b></p>
 
@@ -167,16 +155,16 @@ transaction(txId1) -> transaction(txId2)
 边数据导入配置界面如下：
 
 <p align="center">
-  <img src="images/07_import_edges_config.png" alt="边数据导入配置" width="850">
+  <img src="images/6.png" alt="边数据导入配置" width="850">
 </p>
 <p align="center"><b>图 7 边数据导入配置界面</b></p>
 
 边数据导入成功界面如下：
 
 <p align="center">
-  <img src="images/08_import_edges_success.png" alt="边数据导入成功" width="850">
+  <img src="images/7.png" alt="边数据导入" width="850">
 </p>
-<p align="center"><b>图 8 边数据导入成功界面</b></p>
+<p align="center"><b>图 8 边数据导入配置界面</b></p>
 
 ---
 
@@ -205,7 +193,7 @@ RETURN count(r) AS edge_count;
 查询结果如下：
 
 <p align="center">
-  <img src="images/09_basic_query_count.png" alt="基础查询结果" width="850">
+  <img src="images/8.png" alt="基础查询结果" width="850">
 </p>
 <p align="center"><b>图 9 基础查询结果：交易节点数和交易关系数</b></p>
 
@@ -224,7 +212,7 @@ LIMIT 10;
 查询结果如下：
 
 <p align="center">
-  <img src="images/10_basic_query_path.png" alt="前十条交易关系查询结果" width="850">
+  <img src="images/9.png" alt="前十条交易关系查询结果" width="850">
 </p>
 <p align="center"><b>图 10 基础查询结果：前十条交易关系</b></p>
 
@@ -245,7 +233,7 @@ LIMIT 10;
 查询结果如下：
 
 <p align="center">
-  <img src="images/11_complex_query_two_hop.png" alt="两跳交易路径查询结果" width="850">
+  <img src="images/10.png" alt="两跳交易路径查询结果" width="850">
 </p>
 <p align="center"><b>图 11 复杂查询结果：两跳交易路径追踪</b></p>
 
@@ -269,7 +257,7 @@ WHERE a.class = 1
 查询结果如下：
 
 <p align="center">
-  <img src="images/12_complex_query_class.png" alt="特定类别交易路径查询结果" width="850">
+  <img src="images/11.png" alt="特定类别交易路径查询结果" width="850">
 </p>
 <p align="center"><b>图 12 复杂查询结果：特定类别交易的两跳路径</b></p>
 
