@@ -124,14 +124,14 @@ ORDER BY in_degree DESC
 LIMIT 10;
 ```
 
-运行结果中，交易 `84460750` 是一个值得重点关注的风险节点。根据本地数据统计，该节点属于 `class=1`，入度为 68，说明有大量交易流向该风险交易，具有明显的资金汇聚特征。
+运行结果中，交易 30179316 的入度最高。根据查询结果，该节点属于 class=1，入度为 177，说明在所有已标记风险交易中，30179316 是最明显的资金汇聚节点。排在其后的还有 269905668、96365231、99675435 等风险交易节点，它们同样具有较高的资金汇聚特征。
 
 查询结果截图如下：
 
 <p align="center">
-  <img src="images2/03_in_degree_result.png" alt="风险交易入度中心性查询结果" width="850">
+  <img src="images2/1.png" alt="风险交易入度中心性查询结果" width="850">
 </p>
-<p align="center"><b>图 3 风险交易入度中心性查询结果</b></p>
+<p align="center"><b>图 1 风险交易入度中心性查询结果</b></p>
 
 ### 3.4 查询风险交易的出度中心性
 
@@ -154,29 +154,18 @@ LIMIT 10;
 查询结果截图如下：
 
 <p align="center">
-  <img src="images2/04_out_degree_result.png" alt="风险交易出度中心性查询结果" width="850">
+  <img src="images2/2.png" alt="风险交易出度中心性查询结果" width="850">
 </p>
-<p align="center"><b>图 4 风险交易出度中心性查询结果</b></p>
+<p align="center"><b>图 2 风险交易出度中心性查询结果</b></p>
 
-### 3.5 分析资金汇聚节点 `84460750`
+### 3.5 分析资金汇聚节点 `30179316`
 
 为了进一步解释中心性结果，选择入度最高的风险节点 `84460750` 进行展开分析。首先查询流向该风险节点的交易来源。
 
 Cypher 代码如下：
 
 ```cypher
-MATCH (src:transaction)-[:transfer]->(hub:transaction {txId:'84460750'})
-RETURN src.txId AS source_tx,
-       src.class AS source_class,
-       hub.txId AS risk_hub,
-       hub.class AS hub_class
-LIMIT 30;
-```
-
-如果 `txId` 为数值类型，则写为：
-
-```cypher
-MATCH (src:transaction)-[:transfer]->(hub:transaction {txId:84460750})
+MATCH (src:transaction)-[:transfer]->(hub:transaction {txId:30179316})
 RETURN src.txId AS source_tx,
        src.class AS source_class,
        hub.txId AS risk_hub,
@@ -189,10 +178,11 @@ LIMIT 30;
 查询结果截图如下：
 
 <p align="center">
-  <img src="images2/05_hub_in_sources.png" alt="资金汇聚来源分析" width="850">
+  <img src="images2/3.png" alt="资金汇聚来源分析" width="850">
 </p>
-<p align="center"><b>图 5 风险交易 84460750 的资金汇聚来源</b></p>
+<p align="center"><b>图 3 风险交易 84460750 的资金汇聚来源</b></p>
 
+根据本地数据，30179316 的出度为 0，说明它更适合作为“资金汇聚风险节点”进行分析，而不适合作为“风险继续外扩”的样例。为了体现中心性分析后的进一步追踪过程，下面补充选择具有外流关系的风险节点 84460750 观察其后续流向。
 继续查询该风险节点的后续流向：
 
 ```cypher
@@ -208,9 +198,9 @@ RETURN hub.txId AS risk_hub,
 查询结果截图如下：
 
 <p align="center">
-  <img src="images2/06_hub_out_target.png" alt="风险节点后续流向" width="850">
+  <img src="images2/4.png" alt="风险节点后续流向" width="850">
 </p>
-<p align="center"><b>图 6 风险交易 84460750 的后续流向</b></p>
+<p align="center"><b>图 4 风险交易 84460750 的后续流向</b></p>
 
 ### 3.6 分析风险扩散节点 `97011545`
 
