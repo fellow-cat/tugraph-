@@ -98,6 +98,7 @@ transaction(txId1) -> transaction(txId2)
 连接地址：8.140.39.221:7687
 账号：admin
 ---
+
 ### 3.2 进入实验图项目
 
 登录成功后，进入已经导入 Transactions Dataset 的图项目。本实验使用的图模型如下：
